@@ -53,6 +53,7 @@ const productSchema = new mongoose.Schema({
   //     message: "Please select correct category for product",
   //   },
   // },
+  
   mainCategory: {
     type: String,
     required: [false, "Please select category for this product"],
