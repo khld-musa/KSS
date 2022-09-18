@@ -39,7 +39,7 @@ exports.newProduct = catchAsyncErrors(async (req, res, next) => {
         mainCategory,
         bowelsPrice,
         largWeight,
-        mediumPrice,
+        mediumPrice, 
         mediumWeight,
         largPrice,
         smallPrice,

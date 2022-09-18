@@ -54,10 +54,10 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 
 // Forgot Password   =>  /api/v1/password/forgot
 exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
-  const user = await User.findOne({ email: req.body.email });
+  const user = await User.findOne({ phone: req.body.phone });
 
   if (!user) {
-    return next(new ErrorHandler("User not found with this email", 404));
+    return next(new ErrorHandler("User not found with this phone", 404));
   }
 
   // Get reset token
@@ -65,21 +65,22 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
 
   await user.save({ validateBeforeSave: false });
 
-  const message = `Your password reset token is as follow:\n\n${resetToken}\n\nIf you have not requested this email, then ignore it.`;
+  // const message = `Your password reset token is as follow:\n\n${resetToken}\n\nIf you have not requested this phone, then ignore it.`;
+  const message = `Your password reset token is as follow:\n ${resetToken}\n\nIf you have not requested this phone, then ignore it.`;
 
   try {
     await sendEmail({
-      email: user.email,
+      phone: user.phone,
       subject: "KSS Password Recovery",
       message,
     });
 
     res.status(200).json({
       success: true,
-      message: `Email sent to: ${user.email}`,
+      message: `Email sent to: ${user.phone}`,
     });
   } catch (error) {
-    user.resetPasswordToken = undefined;
+    user.resetPasswordToken = undefined;  
     user.resetPasswordExpire = undefined;
 
     await user.save({ validateBeforeSave: false });

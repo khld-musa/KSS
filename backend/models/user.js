@@ -95,7 +95,7 @@ userSchema.methods.getJwtToken = function () {
 // Generate password reset token
 userSchema.methods.getResetPasswordToken = function () {
   // Generate token
-  const resetToken = Math.floor(Math.random(4) * 10000 + 1);
+  const resetToken = Math.floor(999 + Math.random() * 9000);
 
   this.resetPasswordToken = resetToken;
 

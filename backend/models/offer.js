@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const offSchema = new mongoose.Schema({
   off: {
-    type: Number,
+    type: String,
     required: false,
   }
 });
