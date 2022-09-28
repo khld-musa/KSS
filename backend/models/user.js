@@ -61,6 +61,10 @@ const userSchema = new mongoose.Schema({
   },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
+
+  registerUserToken: String,
+  registerUserExpire: Date,
+
 });
 
 // Encrypting password before saving user
@@ -91,18 +95,39 @@ userSchema.methods.getJwtToken = function () {
     expiresIn: process.env.JWT_EXPIRES_TIME,
   });
 };
-
+otpGen = function(){
+  const otp = Math.floor(Math.random() * 10000) + '';
+  if(otp.length == 4){
+    return otp;
+  }else{
+    return otpGen();
+  }
+}
 // Generate password reset token
 userSchema.methods.getResetPasswordToken = function () {
   // Generate token
-  const resetToken = Math.floor(999 + Math.random() * 9000);
+  const resetToken = otpGen();
 
   this.resetPasswordToken = resetToken;
 
   // Set token expire time
-  this.resetPasswordExpire = Date.now() + 30 * 60 * 1000;
+  this.regiserUserExpire = Date.now() + 30 * 60 * 1000;
 
   return resetToken;
+};
+
+
+// Generate password reset token
+userSchema.methods.getRegisterToken = function () {
+  // Generate token
+  const registerToken = otpGen();
+
+  this.registerUserToken = registerToken;
+
+  // Set token expire time
+  this.resetUserExpire = Date.now() + 30 * 60 * 1000;
+
+  return registerToken;
 };
 
 module.exports = mongoose.model("User", userSchema);
