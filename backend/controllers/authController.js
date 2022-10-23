@@ -206,13 +206,13 @@ exports.otp = catchAsyncErrors(async (req, res, next) => {
 // Reset Password   =>  /api/v1/password/reset/:token
 exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
   // Hash URL token
-  const { otp } = req.body;
+  const { resetPasswordToken } = req.body;
 
   const user = await User.findOne({
     phone: req.body.phone
   });
 
-  if (!user && !compareExpDate(user.resetPasswordExpire)) {
+  if (!user) {
     return next(
       new ErrorHandler(
         "Password reset token is invalid or has been expired",
@@ -224,7 +224,7 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
   if (req.body.password !== req.body.confirmPassword) {
     return next(new ErrorHandler("Password does not match", 400));
   }
-  if (req.body.otp !== user.resetPasswordToken) {
+  if (req.body.resetPasswordToken !== user.resetPasswordToken) {
     return next(new ErrorHandler("invalid otp", 400));
   }
 
