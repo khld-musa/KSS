@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const offSchema = new mongoose.Schema({
+  num: {
+    type: Number,
+    
+  },
   off: {
     type: String,
     required: false,

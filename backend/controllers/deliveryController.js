@@ -10,8 +10,6 @@ exports.newDelivery = catchAsyncErrors(async (req, res, next) => {
     const { name, number, user, order } = req.body;
 
     const delivery = await Delivery.create({
-      name,
-      number,
       user,
       order
     });
@@ -48,6 +46,17 @@ exports.getSingleDelivery = catchAsyncErrors(async (req, res, next) => {
     success: true,
     delivery,
   });
+});
+
+// Get logged in user orders   =>   /api/v1/deliveries/me
+exports.myDeliveries = catchAsyncErrors(async (req, res, next) => {
+  const deliveries = await Delivery.find({ user: req.user.id });
+
+  res.status(200).json({
+    success: true,
+    deliveries,
+  });
+  console.log(orders)
 });
 
 // Update Delivery   =>   /api/v1/admin/delivery/:id

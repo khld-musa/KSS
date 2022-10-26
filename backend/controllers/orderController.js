@@ -80,6 +80,7 @@ exports.myOrders = catchAsyncErrors(async (req, res, next) => {
     success: true,
     orders,
   });
+  console.log(orders)
 });
 
 // Get all orders - ADMIN  =>   /api/v1/admin/orders/

@@ -7,7 +7,8 @@ const {
     getAdminDeliveries,
     updateDelivery,
     deleteDelivery,
-    getSingleDelivery
+    getSingleDelivery,
+    myDeliveries
 
 } = require('../controllers/deliveryController')
 
@@ -15,6 +16,8 @@ const { isAuthenticatedUser, authorizeRoles } = require('../middlewares/auth');
 
 router.route('/admin/deliveries').get(isAuthenticatedUser,  getAdminDeliveries);
 router.route('/delivery/:id').get(isAuthenticatedUser, getSingleDelivery);
+
+router.route('/deliveries/me').get(isAuthenticatedUser, myDeliveries);
 
 router.route('/admin/delivery/new').post(isAuthenticatedUser, authorizeRoles('admin'), newDelivery);
 

@@ -9,9 +9,10 @@ exports.newOffer = catchAsyncErrors(async (req, res, next) => {
         const {
             off
         } = req.body;
-
+        const offerCount = await Offer.countDocuments();
         const offer = await Offer.create({
-            off
+            off,
+            num: offerCount
         });
 
         res.status(200).json({
