@@ -34,10 +34,11 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
     }
 
     const { orderItems, shippingInfo } = req.body;
-
+    const orderCount =  Order.countDocuments();
     const order = Order.create({
       orderItems,
       shippingInfo,
+      orderNum: orderCount,
       bokImage: {
         data: req.file.filename,
       },
