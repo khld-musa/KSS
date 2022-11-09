@@ -3,9 +3,9 @@ const mongoose = require("mongoose");
 const orderSchema = mongoose.Schema({
   shippingInfo: [
     {
-      name: {
+      userName: {
         type: String,
-        required: false,
+        required: true,
       },
       address: {
         type: String,
@@ -101,7 +101,10 @@ const orderSchema = mongoose.Schema({
       // },
     },
   ],
-
+  num: {
+    type: Number,
+    
+  },
   orderStatus: {
     type: String,
     required: true,

@@ -27,19 +27,18 @@ const upload = multer({
 // Create new order   =>   /api/v1/admin/order/new
 exports.newOrder = catchAsyncErrors(async (req, res, next) => {
   try {
-   
-      upload(req, res, (err) => {
-        const orderCount =  Order.countDocuments();
+
+      upload(req, res, async(err) => {
     if (err) {
       console.Console.log(err);
     }
 
-    const { orderItems, shippingInfo } = req.body;
-   
-    const order = Order.create({
+    const { orderItems, shippingInfo, num } = req.body;
+    const orderCount = await Order.countDocuments();
+    const order = await Order.create({
       orderItems,
       shippingInfo,
-      orderNum: orderCount,
+      num: orderCount,
       bokImage: {
         data: req.file.filename,
       },
@@ -50,7 +49,6 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
     res.status(200).json({
       success: true,
       order,
-      // orderCount
     })
   });
   } catch (err) {
@@ -111,11 +109,11 @@ exports.updateOrder = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler("You have already delivered this order", 400));
   }
 
-  // order.orderItems.forEach(async (item) => {
-  //   await updateStock(item.product, item.quantity);
-  // });
+  order.orderItems.forEach(async (item) => {
+    await updateStock(item.product, item.quantity);
+  });
 
-  (order.orderStatus = req.body.orderStatus), (order.deliveredAt = Date.now());
+  (order.orderStatus = req.body.status), (order.deliveredAt = Date.now());
 
   await order.save();
 
@@ -124,13 +122,13 @@ exports.updateOrder = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-// async function updateStock(id, quantity) {
-//   const product = await Product.findById(id);
+async function updateStock(id, quantity) {
+  const product = await Product.findById(id);
 
-//   product.stock = product.stock - quantity;
+  product.stock = product.stock - quantity;
 
-//   await product.save({ validateBeforeSave: false });
-// }
+  await product.save({ validateBeforeSave: false });
+}
 
 // Delete order   =>   /api/v1/admin/order/:id
 exports.deleteOrder = catchAsyncErrors(async (req, res, next) => {

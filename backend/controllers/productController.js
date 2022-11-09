@@ -28,7 +28,7 @@ const upload = multer({
 exports.newProduct = catchAsyncErrors(async (req, res, next) => {
   try {
 
-    upload(req, res, (err) => {
+    upload(req, res, async(err) => {
 
       if (err) {
         console.Console.log(err);
@@ -45,9 +45,10 @@ exports.newProduct = catchAsyncErrors(async (req, res, next) => {
         smallPrice,
         smallWeight,
         headPrice,
+        num
       } = req.body;
-
-      const product = Product.create({
+      const productCount = await Product.countDocuments();
+      const product = await Product.create({
         name,
         headPrice,
         bowelsPrice,
@@ -58,6 +59,7 @@ exports.newProduct = catchAsyncErrors(async (req, res, next) => {
         smallPrice,
         smallWeight,
         mainCategory,
+        num: productCount,
         productImage: {
           data: req.file.filename,
         },

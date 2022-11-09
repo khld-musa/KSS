@@ -39,20 +39,6 @@ exports.getInfos = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-// Get single offer details   =>   /api/v1/offer/:id
-exports.getSingleInfo = catchAsyncErrors(async (req, res, next) => {
-  const info = await Info.findById(req.params.id);
-
-  if (!info) {
-    return next(new ErrorHandler("Product not found", 404));
-  }
-
-  res.status(200).json({
-    success: true,
-    info,
-  });
-});
-
 
 exports.updateInfo = catchAsyncErrors(async (req, res, next) => {
   let info = await Info.findById(req.params.id);
